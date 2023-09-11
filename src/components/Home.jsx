@@ -8,8 +8,14 @@ function Home() {
 
   useEffect(() => {
     const fetchStocksFromApi = async () => {
-      const data = await fetch("http://localhost:3000/stocks");
-      setStocks(await data.json());
+      let data;
+      try {
+        data = (await fetch("http://localhost:3000/stocks")).json();
+      } catch (error) {
+        data = [];
+      }
+
+      setStocks(data);
     };
     fetchStocksFromApi();
   });
