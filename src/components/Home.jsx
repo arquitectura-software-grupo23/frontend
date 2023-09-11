@@ -1,34 +1,31 @@
 import { useEffect, useState } from "react";
-import Home
+import StockTable from "./StocksTable";
+import StockCards from "./StockCards";
+import { Box } from "@mui/material";
 
 function Home() {
+  const [stocks, setStocks] = useState([]);
+
   useEffect(() => {
     const fetchStocksFromApi = async () => {
       const data = await fetch("http://localhost:3000/stocks");
-      console.log(data);
+      setStocks(await data.json());
     };
     fetchStocksFromApi();
   });
-  const result = [
-    {
-      symbol: "AMZN",
-      currency: "USD",
-      price: 138.23,
-      shortName: "Amazon.com, Inc.",
-      source: "Nasdaq Real Time Price",
-      updatedAt: "2023-09-11T01:01:53.362Z",
-    },
-    {
-      symbol: "TSLA",
-      currency: "USD",
-      price: 248.5,
-      shortName: "Tesla, Inc.",
-      source: "Nasdaq Real Time Price",
-      updatedAt: "2023-09-11T01:01:53.363Z",
-    },
-  ];
-
-  return <>test</>;
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        flexDirection: "column",
+        alignContent: "center",
+      }}
+    >
+      <StockCards stocks={stocks}></StockCards>
+      {/* <StockTable stocks={stocks}></StockTable> */}
+    </Box>
+  );
 }
 
 export default Home;
