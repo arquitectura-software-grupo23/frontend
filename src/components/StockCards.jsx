@@ -3,7 +3,14 @@ import { Box } from "@mui/material";
 
 function StockCards({ stocks }) {
   return (
-    <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexWrap: "wrap",
+        justifyContent: "center",
+        overflow: "auto",
+      }}
+    >
       {stocks.map((stock) => (
         <StockCard stock={stock} />
       ))}
