@@ -18,7 +18,7 @@ function StockCard({ stock }) {
           <Typography variant="h5" component="div">
             {stock.symbol}
           </Typography>
-          <Typography variant="subtitle1" color="textSecondary" noWrap="true">
+          <Typography variant="subtitle1" color="textSecondary" noWrap={true}>
             {stock.shortName}
           </Typography>
           <Typography variant="body1" style={{ color: "lightgreen" }}>

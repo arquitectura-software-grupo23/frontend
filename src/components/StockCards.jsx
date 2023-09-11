@@ -12,7 +12,7 @@ function StockCards({ stocks }) {
       }}
     >
       {stocks.map((stock) => (
-        <StockCard stock={stock} />
+        <StockCard key={stock.shortName} stock={stock} />
       ))}
     </Box>
   );
