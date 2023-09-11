@@ -1,17 +1,19 @@
 import { useEffect, useState } from "react";
-import StockCards from "./StockCards";
+import StocksTable from "./StocksTable";
 import { Box } from "@mui/material";
+import { useParams } from 'react-router-dom';
 
 function Home() {
+  const {symbol} = useParams()
   const [stocks, setStocks] = useState([]);
 
   useEffect(() => {
     const fetchStocksFromApi = async () => {
-      const data = await fetch("http://localhost:3000/stocks");
+      const data = await fetch(`http://localhost:3000/stocks/${symbol}`);
       setStocks(await data.json());
     };
     fetchStocksFromApi();
-  }, []);
+  }, [symbol]);
   
   return (
     <Box
@@ -22,7 +24,7 @@ function Home() {
         alignContent: "center",
       }}
     >
-      <StockCards stocks={stocks}></StockCards>
+      <StocksTable stocks={stocks}></StocksTable>
     </Box>
   );
 }
