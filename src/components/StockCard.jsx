@@ -29,9 +29,7 @@ function StockCard({ stock }) {
             <Typography variant="body1">
               <br /> Updated {minutesSince(stock.updatedAt)} minutes ago
             </Typography>
-
             <Typography variant="subtitle2">Source: {stock.source}</Typography>
-
             <Typography variant="subtitle2">
               {new Date(stock.updatedAt).toLocaleString()}
             </Typography>
