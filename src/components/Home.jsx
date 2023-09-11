@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import StockTable from "./StocksTable";
 import StockCards from "./StockCards";
 import { Box } from "@mui/material";
 
@@ -20,6 +19,7 @@ function Home() {
     };
     fetchStocksFromApi();
   }, []);
+
   return (
     <Box
       sx={{
@@ -30,7 +30,6 @@ function Home() {
       }}
     >
       <StockCards stocks={stocks}></StockCards>
-      {/* <StockTable stocks={stocks}></StockTable> */}
     </Box>
   );
 }

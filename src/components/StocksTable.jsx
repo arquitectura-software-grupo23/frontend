@@ -8,6 +8,7 @@ import {
   TableRow,
 } from "@mui/material";
 
+
 function StockTable({ stocks }) {
   return (
     <TableContainer component={Paper}>
@@ -24,7 +25,7 @@ function StockTable({ stocks }) {
         </TableHead>
         <TableBody>
           {stocks.map((stock) => (
-            <TableRow key={stock.symbol}>
+            <TableRow key={stock.updatedAt}>
               <TableCell component="th" scope="row">
                 {stock.symbol}
               </TableCell>
