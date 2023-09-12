@@ -1,0 +1,63 @@
+/* Profile.css */
+.profile-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .profile-card {
+    text-align: center;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    max-width: 600px; /* Ancho máximo de la tarjeta */
+    width: 100%; /* Asegura que la tarjeta ocupe todo el ancho disponible */
+  }
+  
+  .profile-background {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+  }
+  
+  .profile-background img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .profile-info {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .profile-image {
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    border-radius: 50%;
+    margin: -50px 0 20px;
+  }
+  
+  .profile-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  
+  .profile-info h2,
+  .profile-info p {
+    color: #333;
+  }
+  
+  .profile-info .MuiSvgIcon-root {
+    color: #333; /* Cambia el color del icono a uno que contraste con el fondo blanco */
+  }
