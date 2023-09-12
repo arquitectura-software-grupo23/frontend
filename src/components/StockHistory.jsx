@@ -3,6 +3,8 @@ import StocksTable from "./StocksTable";
 import { Box } from "@mui/material";
 import { useParams } from 'react-router-dom';
 import { Button } from "@mui/material";
+import { Link } from 'react-router-dom';
+
 
 function StockHistory() {
   const {symbol} = useParams()
@@ -43,6 +45,18 @@ function StockHistory() {
         alignContent: "center",
       }}
     >
+    <Box
+    sx={{
+      display: "flex",
+      justifyContent: "center",
+      marginBottom: "20px",
+    }}
+    >
+      <Button variant="contained" color="primary" component={Link} to={`/chart/${symbol}`}>
+        View Chart
+      </Button>
+    </Box>
+    
       <StocksTable stocks={stocks}></StocksTable>
       <Box
       sx={{
