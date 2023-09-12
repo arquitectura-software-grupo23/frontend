@@ -12,7 +12,7 @@ function Home() {
       setStocks(await data.json());
     };
     fetchStocksFromApi();
-  });
+  },[]);
   return (
     <Box
       sx={{

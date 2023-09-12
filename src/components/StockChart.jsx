@@ -22,3 +22,4 @@ function StockChart({ data }) {
 // una vela de apertura y cierre del dia, y quiza un punto promedio
 // Estaba revisando como hacer esto y se me fue la hora xd 
 export default StockChart;
+
