@@ -19,11 +19,14 @@ const style = {
   p: 4,
 };
 
+
 const Profile = () => {
   const { user, isAuthenticated, isLoading } = useAuth0();
   const [open, setOpen] = React.useState(false);
   const [showCompras, setShowCompras] = React.useState(false);
   const [comprasButtonLabel, setComprasButtonLabel] = React.useState("Mostrar compras");
+  const [dinero, setDinero] = React.useState(100);
+  const emojiDinero = "💰";
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -35,6 +38,11 @@ const Profile = () => {
       setShowCompras(true);
       setComprasButtonLabel("Ocultar compras");
     }
+  };
+
+  const handleAgregarDinero = () => {
+    const nuevoSaldo = dinero + 50; // Sumar $50 al saldo actual
+    setDinero(nuevoSaldo); // Actualizar la variable "dinero" con el nuevo saldo
   };
 
   if (isLoading) {
@@ -58,8 +66,8 @@ const Profile = () => {
             <h2>{user.name}</h2>
             <p>{user.email}</p>
             <div style={{ display: 'flex' }}>
-              <Button className="MuiButton-textPrimary" style={{ marginRight: '10px' }} onClick={handleOpen}>Billetera</Button>
-              <Button style={{ marginLeft: '10px' }} onClick={handleComprasClick}>{comprasButtonLabel}</Button>
+              <Button sx={{ color: 'primary.main' }} className="MuiButton-textPrimary" style={{ marginRight: '10px' }} onClick={handleOpen}>Billetera</Button>
+              <Button sx={{ color: 'primary.main' }} style={{ marginLeft: '10px' }} onClick={handleComprasClick}>{comprasButtonLabel}</Button>
             </div>
             <Modal
               open={open}
@@ -72,8 +80,11 @@ const Profile = () => {
                   Dinero disponible
                 </Typography>
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                  Tu saldo actual es de: $__
+                  Tu saldo actual es de: {emojiDinero}${dinero}
                 </Typography>
+                <Button variant="contained" color="success" style={{ marginTop: '20px' }} onClick={handleAgregarDinero}>
+                  Obtener más dinero
+                </Button>
               </Box>
             </Modal>
           </div>
