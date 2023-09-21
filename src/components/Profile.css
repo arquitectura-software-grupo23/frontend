@@ -14,7 +14,7 @@
     text-align: center;
     background-color: #fff;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 20%);
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -63,7 +63,7 @@
     color: #333;
   }
 
-  .profile-info .MuiSvgIcon-root {
+  .profile-info .mui-svg-icon-root {
     color: #333; /* Cambia el color del icono a uno que contraste con el fondo blanco */
   }
 
@@ -72,7 +72,7 @@
     text-align: center;
     background-color: #fff;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 20%);
     display: flex;
     flex-direction: column;
     overflow: hidden;
