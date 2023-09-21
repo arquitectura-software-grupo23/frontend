@@ -1,7 +1,6 @@
 import React from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import "./Profile.css";
-import PaidIcon from '@mui/icons-material/Paid';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
