@@ -1,8 +1,8 @@
-import { useState } from "react";
-import "./App.css";
-
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
+
+import UserContextProvider from "./contexts/UserContext";
+import "./App.css";
 
 const darkTheme = createTheme({
   palette: {
@@ -15,8 +15,10 @@ import Routing from "./Routing";
 function App() {
   return (
     <ThemeProvider theme={darkTheme}>
-      <CssBaseline />
-      <Routing />
+      <UserContextProvider>
+        <CssBaseline />
+        <Routing />
+      </UserContextProvider>
     </ThemeProvider>
   );
 }
