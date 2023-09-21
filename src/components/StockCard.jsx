@@ -1,8 +1,9 @@
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import { CardActionArea } from "@mui/material";
+import { CardActionArea, Button } from "@mui/material";
 import { Link } from "react-router-dom";
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 function minutesSince(updatedAt) {
   const now = new Date();
@@ -12,6 +13,7 @@ function minutesSince(updatedAt) {
 }
 
 function StockCard({ stock }) {
+
   return (
     <Card  key={stock.symbol} style={{ margin: 20, width: 300 }}>
       <Link to={stock.symbol} key={stock.shortName} style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -36,6 +38,13 @@ function StockCard({ stock }) {
           </CardContent>
         </CardActionArea>
       </Link>
+      <div>
+        <Link to={`/profile`} style={{ textDecoration: 'none', color: 'inherit', width: '100%' }}>
+          <Button  sx={{ backgroundColor: 'green', '&:hover': { backgroundColor: 'lightgreen' } }} component="label" variant="contained" startIcon={<ShoppingCartIcon />} style={{ width: '100%'}}>
+            Comprar stocks
+          </Button>
+        </Link>
+      </div>
     </Card>
   );
 }
