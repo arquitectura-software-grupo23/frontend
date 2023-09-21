@@ -9,7 +9,7 @@ function Home() {
     const fetchStocksFromApi = async () => {
       let data;
       try {
-        data = await fetch(`${import.meta.env.VITE_API_URL}/stocks`)
+        data = await fetch("http://localhost:3000/stocks")
         data = await data.json()
       } catch (error) {
         data = [];
