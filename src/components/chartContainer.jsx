@@ -1,12 +1,13 @@
 import StockChart from './StockChart.jsx';
 import { useParams } from 'react-router-dom';
-const {symbol} = useParams()
+import { useState, useEffect } from 'react';
 
 const HOUR = 3600000;
 const DAY = 24 * HOUR;
 const MIN_20 = 20 * 60 * 1000;
 
 const ChartContainer = () => {
+    const { symbol } = useParams();
     const [chartType, setChartType] = useState('7days');
     const [chartData, setChartData] = useState({});
     const [apiData, setApiData] = useState({});
