@@ -50,17 +50,6 @@ const Profile = () => {
     fetchMoneyFromUserInfo();
   }, [triggerUpdate]); // Añade triggerUpdate como dependencia
   
-  useEffect(()=>{
-    const getRequestsWithValidations = async () => {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/requestsWithValidations?user_id=test`)
-      const responseAsJson = await response.json()
-      setRequests(responseAsJson);
-      //console.log(responseAsJson);
-    }
-    
-  },[])
-
-
   const getRequestsWithValidations = async () => {
     const response = await fetch(`${import.meta.env.VITE_API_URL}/requestsWithValidations?user_id=test`)
     const responseAsJson = await response.json()
@@ -104,7 +93,6 @@ const Profile = () => {
  
 
  const filterValidatedRequests = (requests) => {
-  console.log(requests[2].validations)
   return requests.filter(requests => requests.validations.length > 0)
   }
 
