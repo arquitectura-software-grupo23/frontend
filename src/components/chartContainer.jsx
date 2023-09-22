@@ -44,8 +44,8 @@ const ChartContainer = () => {
                 default:
                     targetDate = new Date(currentDate - 24 * HOUR);
             }
-
-            const response = await fetch(`http://localhost:3000/stocks/${symbol}?date=${targetDate.toISOString()}`);
+           
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/${symbol}?date=${targetDate.toISOString()}`);
             // Habria que revisar si hay que manejar la paginacion igual al usar el parametro date de la API
             const data = await response.json();
             setApiData(prevState => ({ ...prevState, [type]: data }));

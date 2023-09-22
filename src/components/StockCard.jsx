@@ -4,6 +4,8 @@ import Typography from "@mui/material/Typography";
 import { CardActionArea, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import ShowChartIcon from '@mui/icons-material/ShowChart'; 
+
 
 function minutesSince(updatedAt) {
   const now = new Date();
@@ -39,8 +41,26 @@ function StockCard({ stock }) {
         </CardActionArea>
       </Link>
       <div>
+        <Link to={`/chart/${stock.symbol}`} style={{ textDecoration: 'none', color: 'inherit', width: '100%' }}>
+          <Button  
+            sx={{ 
+              backgroundColor: "rgba(255, 255, 255, 0.5)",
+              opacity: 0.5,
+              '&:hover': { backgroundColor: 'lightgrey' },
+              borderRadius: 0
+            }} 
+            component="label" 
+            variant="contained" 
+            startIcon={<ShowChartIcon />}
+            style={{ width: '100%'}}
+          >
+            Grafico
+          </Button>
+        </Link>
+      </div>
+      <div>
         <Link to={`/profile`} style={{ textDecoration: 'none', color: 'inherit', width: '100%' }}>
-          <Button  sx={{ backgroundColor: 'green', '&:hover': { backgroundColor: 'lightgreen' } }} component="label" variant="contained" startIcon={<ShoppingCartIcon />} style={{ width: '100%'}}>
+          <Button  sx={{ backgroundColor: 'green', '&:hover': { backgroundColor: 'lightgreen' }, borderRadius: 0 }} component="label" variant="contained" startIcon={<ShoppingCartIcon />} style={{ width: '100%'}}>
             Comprar stocks
           </Button>
         </Link>
