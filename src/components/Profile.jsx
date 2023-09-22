@@ -2,9 +2,11 @@ import React from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import "./Profile.css";
 import Button from '@mui/material/Button';
+import { TextField } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
+import { useEffect, useState } from "react";
 
 const style = {
   position: 'absolute',
@@ -24,11 +26,32 @@ const Profile = () => {
   const [open, setOpen] = React.useState(false);
   const [showCompras, setShowCompras] = React.useState(false);
   const [comprasButtonLabel, setComprasButtonLabel] = React.useState("Mostrar compras");
-  const [dinero, setDinero] = React.useState(100);
+  const [dinero, setDinero] = useState(0);
+  const [cantidad, setCantidad] = useState('');
+  const [triggerUpdate, setTriggerUpdate] = useState(false);
   const emojiDinero = "💰";
+
+  useEffect(() => {
+    const fetchMoneyFromUserInfo = async () => {
+      console.log('Fetching money from user info', user.sub);
+      const data = await fetch(`${import.meta.env.VITE_API_URL}/getMoney/${user.sub}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const jsonData = await data.json();
+      console.log('Respuesta del servidor:', data, jsonData);
+      setDinero(jsonData[0].wallet);
+    };
+  
+    fetchMoneyFromUserInfo();
+  }, [triggerUpdate]); // Añade triggerUpdate como dependencia
+  
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  
   const handleComprasClick = () => {
     if (showCompras) {
       setShowCompras(false);
@@ -39,11 +62,24 @@ const Profile = () => {
     }
   };
 
-  const handleAgregarDinero = () => {
-    const nuevoSaldo = dinero + 50; // Sumar $50 al saldo actual
-    setDinero(nuevoSaldo); // Actualizar la variable "dinero" con el nuevo saldo
+  const handleAgregarDinero = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/addMoney`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: user.sub,
+          amount: cantidad,
+        }),
+      });
+      setCantidad('');
+      setTriggerUpdate(!triggerUpdate);
+    } catch (error) {
+      console.error('Hubo un error al enviar la solicitud:', error);
+    }
   };
-
   if (isLoading) {
     return <div>Loading ...</div>;
   }
@@ -79,11 +115,26 @@ const Profile = () => {
                   Dinero disponible
                 </Typography>
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                  Tu saldo actual es de: {emojiDinero}${dinero}
+                  Tu saldo actual es de: {emojiDinero} ${dinero}
                 </Typography>
-                <Button variant="contained" color="success" style={{ marginTop: '20px' }} onClick={handleAgregarDinero}>
-                  Obtener más dinero
+              
+                <Box 
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                }}>
+                <Button variant="contained" color="success" onClick={handleAgregarDinero}>
+                  Añadir
                 </Button>
+                <TextField 
+                  id="filled-basic" 
+                  label="Cantidad" 
+                  variant="filled" 
+                  sx={{ marginLeft: 2 }}
+                  value={cantidad}
+                  onChange={(e) => setCantidad(e.target.value)}
+                />
+                </Box>
               </Box>
             </Modal>
           </div>

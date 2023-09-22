@@ -15,7 +15,7 @@ function StockHistory() {
   
   useEffect(() => {
     const fetchStocksFromApi = async () => {
-      const data = await fetch(`http://localhost:3000/stocks/${symbol}?page=${currentPage}&size=${pageSize}`);
+      const data = await fetch(`${import.meta.env.VITE_API_URL}/stocks/${symbol}?page=${currentPage}&size=${pageSize}`);
       const jsonData = await data.json();
     
       if (jsonData.length < pageSize) {
@@ -45,17 +45,6 @@ function StockHistory() {
         alignContent: "center",
       }}
     >
-    <Box
-    sx={{
-      display: "flex",
-      justifyContent: "center",
-      marginBottom: "20px",
-    }}
-    >
-      <Button variant="contained" color="primary" component={Link} to={`/chart/${symbol}`}>
-        View Chart
-      </Button>
-    </Box>
     
       <StocksTable stocks={stocks}></StocksTable>
       <Box
