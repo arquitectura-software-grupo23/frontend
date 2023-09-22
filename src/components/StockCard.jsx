@@ -1,3 +1,4 @@
+import React from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -5,6 +6,7 @@ import { CardActionArea, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import ShowChartIcon from '@mui/icons-material/ShowChart'; 
+import { useEffect, useState } from "react";
 
 
 function minutesSince(updatedAt) {
@@ -15,6 +17,32 @@ function minutesSince(updatedAt) {
 }
 
 function StockCard({ stock }) {
+  const buyStocks = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/request`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            group_id: "23",
+            symbol: stock.symbol,
+            deposit_token: "",
+            quantity: 1,
+            seller: 0,
+            user_id: "test"
+        }),
+      });
+
+      if (response.ok) {
+        console.log('Solicitud exitosa');
+      } else {
+        console.error('Error al realizar la solicitud');
+      }
+    } catch (error) {
+      console.error('Error de red:', error);
+    }
+  };
 
   return (
     <Card  key={stock.symbol} style={{ margin: 20, width: 300 }}>
@@ -60,7 +88,7 @@ function StockCard({ stock }) {
       </div>
       <div>
         <Link to={`/profile`} style={{ textDecoration: 'none', color: 'inherit', width: '100%' }}>
-          <Button  sx={{ backgroundColor: 'green', '&:hover': { backgroundColor: 'lightgreen' }, borderRadius: 0 }} component="label" variant="contained" startIcon={<ShoppingCartIcon />} style={{ width: '100%'}}>
+          <Button  sx={{ backgroundColor: 'green', '&:hover': { backgroundColor: 'lightgreen' }, borderRadius: 0 }} component="label" variant="contained" startIcon={<ShoppingCartIcon />} style={{ width: '100%'}} onClick={buyStocks}>
             Comprar stocks
           </Button>
         </Link>
