@@ -10,7 +10,7 @@ self.addEventListener('message', async (event) => {
 
 async function fetchDataFromAPI(symbol, chartSpanDays, candleSpanMins) {
   // Construct the API endpoint URL based on the passed parameters. 
-  const url = `https://api.stocknet.me/candlestick/${symbol}?chartSpanDays=${chartSpanDays}&candleSpanMins=${candleSpanMins}`;
+  const url = `${import.meta.env.VITE_API_URL}/candlestick/${symbol}?chartSpanDays=${chartSpanDays}&candleSpanMins=${candleSpanMins}`;
 
   try {
       const response = await fetch(url);
