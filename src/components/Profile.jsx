@@ -94,13 +94,11 @@ const Profile = () => {
           <div className="compras-card">
             <div className="compras-column">
               <h3>Compras exitosas</h3>
-              {/* Add content for successful purchases */}
             </div>
           </div>
           <div className="compras-card">
             <div className="compras-column">
               <h3>Compras pendientes</h3>
-              {/* Add content for pending purchases */}
             </div>
           </div>
         </div>
