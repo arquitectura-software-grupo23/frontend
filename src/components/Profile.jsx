@@ -1,8 +1,48 @@
 import React from "react";
 import { useAuth0 } from "@auth0/auth0-react";
+import "./Profile.css";
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
+
 
 const Profile = () => {
   const { user, isAuthenticated, isLoading } = useAuth0();
+  const [open, setOpen] = React.useState(false);
+  const [showCompras, setShowCompras] = React.useState(false);
+  const [comprasButtonLabel, setComprasButtonLabel] = React.useState("Mostrar compras");
+  const [dinero, setDinero] = React.useState(100);
+  const emojiDinero = "💰";
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const handleComprasClick = () => {
+    if (showCompras) {
+      setShowCompras(false);
+      setComprasButtonLabel("Mostrar compras");
+    } else {
+      setShowCompras(true);
+      setComprasButtonLabel("Ocultar compras");
+    }
+  };
+
+  const handleAgregarDinero = () => {
+    const nuevoSaldo = dinero + 50; // Sumar $50 al saldo actual
+    setDinero(nuevoSaldo); // Actualizar la variable "dinero" con el nuevo saldo
+  };
 
   if (isLoading) {
     return <div>Loading ...</div>;
