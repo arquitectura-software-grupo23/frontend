@@ -7,6 +7,8 @@ import { Link } from "react-router-dom";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import ShowChartIcon from '@mui/icons-material/ShowChart'; 
 import { useEffect, useState } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
+
 
 
 function minutesSince(updatedAt) {
@@ -17,6 +19,8 @@ function minutesSince(updatedAt) {
 }
 
 function StockCard({ stock }) {
+  const { user } = useAuth0();
+
   const buyStocks = async () => {
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/request`, {
@@ -30,7 +34,7 @@ function StockCard({ stock }) {
             deposit_token: "",
             quantity: 1,
             seller: 0,
-            user_id: "test"
+            user_id: user.sub
         }),
       });
 
