@@ -51,7 +51,7 @@ const Profile = () => {
   }, [triggerUpdate]); // Añade triggerUpdate como dependencia
   
   const getRequestsWithValidations = async () => {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/requestsWithValidations?user_id=test`)
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/requestsWithValidations?user_id=${user.sub}`)
     const responseAsJson = await response.json()
     setRequests(responseAsJson);
     //console.log(responseAsJson);
