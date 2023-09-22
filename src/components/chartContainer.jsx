@@ -1,74 +1,61 @@
 import StockChart from './StockChart.jsx';
 import { useParams } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-
-const HOUR = 3600000;
-const DAY = 24 * HOUR;
-const MIN_20 = 20 * 60 * 1000;
+import { useState, useEffect , useMemo} from 'react';
 
 const ChartContainer = () => {
     const { symbol } = useParams();
     const [chartType, setChartType] = useState('7days');
     const [chartData, setChartData] = useState({});
-    const [apiData, setApiData] = useState({});
-    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState({
+        '24hours': true,
+        '7days': true,
+        '90days': true
+    });
 
-    // Worker instances
-    const workers = {
-        '7days': new Worker('./chartWorker.jsx'),
-        '90days': new Worker('./chartWorker.jsx'),
-        '24hours': new Worker('./chartWorker.jsx')
+    // Chart types
+    const chartConfig = {
+        '24hours': { chartSpanDays: 1, candleSpanMins: 20 },
+        '7days': { chartSpanDays: 7, candleSpanMins: 60 },
+        '90days': { chartSpanDays: 90, candleSpanMins: 60*24 }
     };
 
-    
+    // Worker instances
+    const workers = useMemo(() => ({
+        '24hours': new Worker('./chartWorker.jsx'),
+        '7days': new Worker('./chartWorker.jsx'),
+        '90days': new Worker('./chartWorker.jsx')
+    }),[]);
+
     Object.keys(workers).forEach(type => {
         workers[type].onmessage = function(e) {
-            const aggregatedData = e.data;
-            setChartData(prevState => ({ ...prevState, [type]: aggregatedData }));
+            if (e.data.error) {
+                setError(e.data.error);
+                setLoading(prevLoading => ({ ...prevLoading, [type]: false }));
+            } else {
+                const aggregatedData = e.data;
+                setChartData(prevState => ({ ...prevState, [type]: aggregatedData }));
+                setLoading(prevLoading => ({ ...prevLoading, [type]: false }));
+            }
         };
+
+        // Initiate fetch in worker right away
+        const { chartSpanDays, candleSpanMins } = chartConfig[type];
+        workers[type].postMessage({
+            action: 'fetch',
+            symbol: symbol,
+            chartSpanDays: chartSpanDays,
+            candleSpanMins: candleSpanMins,
+        });
     });
 
     useEffect(() => {
-        async function fetchData(type) {
-            const currentDate = new Date();
-            let targetDate;
-
-            switch (type) {
-                case '7days':
-                    targetDate = new Date(currentDate - 7 * DAY);
-                    break;
-                case '90days':
-                    targetDate = new Date(currentDate - 90 * DAY);
-                    break;
-                case '24hours':
-                default:
-                    targetDate = new Date(currentDate - 24 * HOUR);
-            }
-
-            const response = await fetch(`http://localhost:3000/stocks/${symbol}?date=${targetDate.toISOString()}`);
-            // Habria que revisar si hay que manejar la paginacion igual al usar el parametro date de la API
-            const data = await response.json();
-            setApiData(prevState => ({ ...prevState, [type]: data }));
-        }
-
-        fetchData('7days');
-        fetchData('90days');
-        fetchData('24hours');
-    }, []);
-
-    useEffect(() => {
-        if (apiData['7days']) {
-            workers['7days'].postMessage({ data: apiData['7days'], interval: HOUR });
-            setLoading(false); 
-        }
-        if (apiData['90days']) {
-            workers['90days'].postMessage({ data: apiData['90days'], interval: DAY });
-
-        }
-        if (apiData['24hours']) {
-            workers['24hours'].postMessage({ data: apiData['24hours'], interval: MIN_20 });
-        }
-    }, [apiData]);
+        // Cleanup workers
+        return () => {
+            Object.values(workers).forEach(worker => worker.terminate());
+        };
+    }, [workers]);
+    
 
     return (
         <div>
@@ -77,14 +64,16 @@ const ChartContainer = () => {
                 <option value="90days">Last 90 days</option>
                 <option value="24hours">Last 24 hours</option>
             </select>
-    
-            {loading ? (
+
+            {error? (
+                <p>Error: {error}</p>
+            ) : loading[chartType] ? (
                 <p>Loading...</p>
             ) : (
                 <StockChart data={chartData[chartType]} />
             )}
         </div>
-    );
+    );  
 }
 
 export default ChartContainer;
