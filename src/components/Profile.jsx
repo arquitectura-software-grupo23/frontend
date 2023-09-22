@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import { useEffect, useState } from "react";
+import ListValidations from "./ListValidations";
 
 const style = {
   position: 'absolute',
@@ -27,6 +28,7 @@ const Profile = () => {
   const [showCompras, setShowCompras] = React.useState(false);
   const [comprasButtonLabel, setComprasButtonLabel] = React.useState("Mostrar compras");
   const [dinero, setDinero] = useState(0);
+  const [requests, setRequests] = useState([]);
   const [cantidad, setCantidad] = useState('');
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const emojiDinero = "💰";
@@ -48,6 +50,23 @@ const Profile = () => {
     fetchMoneyFromUserInfo();
   }, [triggerUpdate]); // Añade triggerUpdate como dependencia
   
+  useEffect(()=>{
+    const getRequestsWithValidations = async () => {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/requestsWithValidations?user_id=test`)
+      const responseAsJson = await response.json()
+      setRequests(responseAsJson);
+      //console.log(responseAsJson);
+    }
+    
+  },[])
+
+
+  const getRequestsWithValidations = async () => {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/requestsWithValidations?user_id=test`)
+    const responseAsJson = await response.json()
+    setRequests(responseAsJson);
+    //console.log(responseAsJson);
+  }
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -59,6 +78,7 @@ const Profile = () => {
     } else {
       setShowCompras(true);
       setComprasButtonLabel("Ocultar compras");
+      getRequestsWithValidations()
     }
   };
 
@@ -80,6 +100,19 @@ const Profile = () => {
       console.error('Hubo un error al enviar la solicitud:', error);
     }
   };
+
+ 
+
+ const filterValidatedRequests = (requests) => {
+  console.log(requests[2].validations)
+  return requests.filter(requests => requests.validations.length > 0)
+  }
+
+const filterNonValidatedRequests = (requests) => {
+  return requests.filter(requests => requests.validations.length == 0)
+}
+
+
   if (isLoading) {
     return <div>Loading ...</div>;
   }
@@ -145,13 +178,16 @@ const Profile = () => {
           <div className="compras-card">
             <div className="compras-column">
               <h3>Compras exitosas</h3>
+              <ListValidations requests={filterValidatedRequests(requests)}/>
             </div>
           </div>
           <div className="compras-card">
             <div className="compras-column">
               <h3>Compras pendientes</h3>
             </div>
+            <ListValidations requests={filterNonValidatedRequests(requests)}/>
           </div>
+          
         </div>
         )}
       </div>
