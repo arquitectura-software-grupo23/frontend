@@ -7,6 +7,7 @@ const ChartContainer = () => {
     const [chartType, setChartType] = useState('7days');
     const [chartData, setChartData] = useState({});
     const [error, setError] = useState(null);
+    const workerModules = import.meta.glob('./chartWorker.js');
     const [loading, setLoading] = useState({
         '24hours': true,
         '7days': true,
@@ -20,12 +21,37 @@ const ChartContainer = () => {
         '90days': { chartSpanDays: 90, candleSpanMins: 60*24 }
     };
 
-    // Worker instances
-    const workers = useMemo(() => ({
-        '24hours': new Worker('./chartWorker.jsx'),
-        '7days': new Worker('./chartWorker.jsx'),
-        '90days': new Worker('./chartWorker.jsx')
-    }),[]);
+    // Use a state to hold the worker instances
+const [workers, setWorkers] = useState({});
+
+useEffect(() => {
+    // Create a local object to hold the workers
+    const localWorkers = {};
+
+    // Helper function to create a worker instance
+    const createWorkerInstance = async () => {
+        const module = await workerModules['./chartWorker.js']();
+        const workerInstance = new Worker(new URL(module.default, import.meta.url));
+        return workerInstance;
+    };
+
+    // Instantiate workers for each type
+    const instantiateWorkers = async () => {
+        localWorkers['24hours'] = await createWorkerInstance();
+        localWorkers['7days'] = await createWorkerInstance();
+        localWorkers['90days'] = await createWorkerInstance();
+        
+        setWorkers(localWorkers); // Update state with new worker instances
+    };
+
+    instantiateWorkers();
+
+    // Cleanup workers on component unmount
+    return () => {
+        Object.values(localWorkers).forEach(worker => worker.terminate());
+    };
+
+}, []);
 
     Object.keys(workers).forEach(type => {
         workers[type].onmessage = function(e) {
@@ -48,15 +74,7 @@ const ChartContainer = () => {
             candleSpanMins: candleSpanMins,
         });
     });
-
-    useEffect(() => {
-        // Cleanup workers
-        return () => {
-            Object.values(workers).forEach(worker => worker.terminate());
-        };
-    }, [workers]);
     
-
     return (
         <div>
             <select value={chartType} onChange={e => setChartType(e.target.value)}>
