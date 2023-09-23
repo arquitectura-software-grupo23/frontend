@@ -19,8 +19,7 @@ function minutesSince(updatedAt) {
 }
 
 function StockCard({ stock }) {
-  const { user, getAccessTokenSilently } = useAuth0();
-  const { user, isAuthenticated } = useAuth0();
+  const { user, isAuthenticated, getAccessTokenSilently  } = useAuth0();
   const [ipAddress, setIPAddress] = useState('')
   const [ipCity, setIPCity] = useState('')
 
