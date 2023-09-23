@@ -20,27 +20,17 @@ function minutesSince(updatedAt) {
 
 function StockCard({ stock }) {
   const { user, isAuthenticated, getAccessTokenSilently  } = useAuth0();
-  const [ipAddress, setIPAddress] = useState('')
-  const [ipCity, setIPCity] = useState('')
-
-  useEffect(() => {
-    fetch('https://api.ipify.org?format=json')
-      .then(response => response.json())
-      .then(data => setIPAddress(data.ip))
-      .catch(error => console.log(error))
-  }, []);
-
-  useEffect(() => {
-    fetch(`https://ipapi.co/${ipAddress}/json`)
-      .then(response => response.json())
-      .then(data => setIPCity(data.city))
-      .catch(error => console.log(error))
-  }, [ipAddress]);
 
   const buyStocks = async () => {
     try {
-      const jwtoken = await getAccessTokenSilently();
+      const ipDataResponse = await fetch('https://api.ipify.org?format=json');
+      const ipData = await ipDataResponse.json();
 
+      const cityDataResponse = await fetch(`https://ipapi.co/${ipData.ip}/json`)
+      const cityData = await cityDataResponse.json();
+
+      const jwtoken = await getAccessTokenSilently();
+      
       const response = await fetch(`${import.meta.env.VITE_API_GATEWAY_URL}/request`, {
         method: 'POST',
         headers: {
@@ -54,8 +44,8 @@ function StockCard({ stock }) {
             quantity: 1,
             seller: 0,
             user_id: user.sub,
-            user_ip: ipAddress,
-            user_location: ipCity
+            user_ip: ipData.ip,
+            user_location: cityData.city
         }),
       });
 
