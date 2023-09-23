@@ -12,7 +12,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     domain={auth0Domain}
     clientId={auth0ClientId}
     authorizationParams={{
-      redirect_uri: window.location.origin
+      redirect_uri: window.location.origin,
+      audience: 'https//jwtauthorizer.com',
+      scope: "read:current_user update:current_user_metadata openid profile"
     }}
   >
     <App />
