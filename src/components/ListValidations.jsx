@@ -22,7 +22,7 @@ function ListValidations({ requests }) {
                 secondary={
                   <>
                     <Typography component="span" variant="p" color="black">
-                      {request.createdAt}
+                      {request.createdAt} {request.user_location}
                     </Typography>
                   </>
                 }

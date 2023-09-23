@@ -151,7 +151,7 @@ const Profile = () => {
                   Dinero disponible
                 </Typography>
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                  Tu saldo actual es de: {emojiDinero} ${dinero}
+                  Tu saldo actual es de: {emojiDinero} ${dinero.toFixed(2)}
                 </Typography>
               
                 <Box 

@@ -20,6 +20,23 @@ function minutesSince(updatedAt) {
 
 function StockCard({ stock }) {
   const { user, getAccessTokenSilently } = useAuth0();
+  const { user, isAuthenticated } = useAuth0();
+  const [ipAddress, setIPAddress] = useState('')
+  const [ipCity, setIPCity] = useState('')
+
+  useEffect(() => {
+    fetch('https://api.ipify.org?format=json')
+      .then(response => response.json())
+      .then(data => setIPAddress(data.ip))
+      .catch(error => console.log(error))
+  }, []);
+
+  useEffect(() => {
+    fetch(`https://ipapi.co/${ipAddress}/json`)
+      .then(response => response.json())
+      .then(data => setIPCity(data.city))
+      .catch(error => console.log(error))
+  }, [ipAddress]);
 
   const buyStocks = async () => {
     try {
@@ -37,7 +54,9 @@ function StockCard({ stock }) {
             deposit_token: "",
             quantity: 1,
             seller: 0,
-            user_id: user.sub
+            user_id: user.sub,
+            user_ip: ipAddress,
+            user_location: ipCity
         }),
       });
 
@@ -75,7 +94,7 @@ function StockCard({ stock }) {
           </CardContent>
         </CardActionArea>
       </Link>
-      <div>
+      {/* <div>
         <Link to={`/chart/${stock.symbol}`} style={{ textDecoration: 'none', color: 'inherit', width: '100%' }}>
           <Button  
             sx={{ 
@@ -92,13 +111,14 @@ function StockCard({ stock }) {
             Grafico
           </Button>
         </Link>
-      </div>
+      </div> */}
       <div>
+        {isAuthenticated&&
         <Link to={`/profile`} style={{ textDecoration: 'none', color: 'inherit', width: '100%' }}>
           <Button  sx={{ backgroundColor: 'green', '&:hover': { backgroundColor: 'lightgreen' }, borderRadius: 0 }} component="label" variant="contained" startIcon={<ShoppingCartIcon />} style={{ width: '100%'}} onClick={buyStocks}>
             Comprar stocks
           </Button>
-        </Link>
+        </Link>}
       </div>
     </Card>
   );
