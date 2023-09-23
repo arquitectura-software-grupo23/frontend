@@ -23,7 +23,7 @@ const style = {
 
 
 const Profile = () => {
-  const { user, isAuthenticated, isLoading } = useAuth0();
+  const { user, isAuthenticated, isLoading, getAccessTokenSilently } = useAuth0();
   const [open, setOpen] = React.useState(false);
   const [showCompras, setShowCompras] = React.useState(false);
   const [comprasButtonLabel, setComprasButtonLabel] = React.useState("Mostrar compras");
@@ -34,27 +34,39 @@ const Profile = () => {
   const emojiDinero = "💰";
 
   useEffect(() => {
+    
     const fetchMoneyFromUserInfo = async () => {
       console.log('Fetching money from user info', user.sub);
-      const data = await fetch(`${import.meta.env.VITE_API_URL}/getMoney/${user.sub}`, {
+
+      const jwtoken = await getAccessTokenSilently();
+      const data = await fetch(`${import.meta.env.VITE_API_GATEWAY_URL}/getMoney/${user.sub}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${jwtoken}`,
         },
       });
       const jsonData = await data.json();
       console.log('Respuesta del servidor:', data, jsonData);
       setDinero(jsonData[0].wallet);
     };
-  
-    fetchMoneyFromUserInfo();
-  }, [triggerUpdate]); // Añade triggerUpdate como dependencia
+    if (isAuthenticated) {
+      fetchMoneyFromUserInfo();
+    }
+  }, [triggerUpdate, isAuthenticated]); // Añade triggerUpdate como dependencia
   
   const getRequestsWithValidations = async () => {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/requestsWithValidations?user_id=${user.sub}`)
-    const responseAsJson = await response.json()
+    const jwtoken = await getAccessTokenSilently();
+
+    const response = await fetch(`${import.meta.env.VITE_API_GATEWAY_URL}/requestsWithValidations?user_id=${user.sub}`, {
+      method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${jwtoken}`,
+        },
+    });
+    const responseAsJson = await response.json();
     setRequests(responseAsJson);
-    //console.log(responseAsJson);
   }
 
   const handleOpen = () => setOpen(true);
@@ -73,10 +85,13 @@ const Profile = () => {
 
   const handleAgregarDinero = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/addMoney`, {
+      const jwtoken = await getAccessTokenSilently();
+
+      const response = await fetch(`${import.meta.env.VITE_API_GATEWAY_URL}/addMoney`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${jwtoken}`,
         },
         body: JSON.stringify({
           id: user.sub,
@@ -96,9 +111,9 @@ const Profile = () => {
   return requests.filter(requests => requests.validations.length > 0)
   }
 
-const filterNonValidatedRequests = (requests) => {
-  return requests.filter(requests => requests.validations.length == 0)
-}
+  const filterNonValidatedRequests = (requests) => {
+    return requests.filter(requests => requests.validations.length == 0)
+  }
 
 
   if (isLoading) {

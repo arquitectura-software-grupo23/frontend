@@ -19,6 +19,7 @@ function minutesSince(updatedAt) {
 }
 
 function StockCard({ stock }) {
+  const { user, getAccessTokenSilently } = useAuth0();
   const { user, isAuthenticated } = useAuth0();
   const [ipAddress, setIPAddress] = useState('')
   const [ipCity, setIPCity] = useState('')
@@ -39,10 +40,13 @@ function StockCard({ stock }) {
 
   const buyStocks = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/request`, {
+      const jwtoken = await getAccessTokenSilently();
+
+      const response = await fetch(`${import.meta.env.VITE_API_GATEWAY_URL}/request`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${jwtoken}`,
         },
         body: JSON.stringify({
             group_id: "23",
