@@ -1,6 +1,7 @@
+import './chartContainer.css';  // import the CSS
 import StockChart from './StockChart.jsx';
 import { useParams } from 'react-router-dom';
-import { useState, useEffect , useMemo} from 'react';
+import { useState, useEffect } from 'react';
 
 const ChartContainer = () => {
     const { symbol } = useParams();
@@ -20,52 +21,57 @@ const ChartContainer = () => {
         '90days': { chartSpanDays: 90, candleSpanMins: 60*24 }
     };
 
-    // Worker instances
-    const workers = useMemo(() => ({
-        '24hours': new Worker('./chartWorker.jsx'),
-        '7days': new Worker('./chartWorker.jsx'),
-        '90days': new Worker('./chartWorker.jsx')
-    }),[]);
-
-    Object.keys(workers).forEach(type => {
-        workers[type].onmessage = function(e) {
-            if (e.data.error) {
-                setError(e.data.error);
-                setLoading(prevLoading => ({ ...prevLoading, [type]: false }));
-            } else {
-                const aggregatedData = e.data;
-                setChartData(prevState => ({ ...prevState, [type]: aggregatedData }));
-                setLoading(prevLoading => ({ ...prevLoading, [type]: false }));
+    useEffect(() => {
+        const fetchDataFromAPI = async (symbol, chartSpanDays, candleSpanMins) => {
+            const url = `${import.meta.env.VITE_API_URL}/candlestick/${symbol}?chartSpanDays=${chartSpanDays}&candleSpanMins=${candleSpanMins}`;
+            try {
+                const response = await fetch(url);
+                const responseData = await response.json();
+                return responseData;
+            } catch (error) {
+                console.error("Error fetching data from API:", error);
+                return { error: "Error fetching data from API." };
             }
         };
 
-        // Initiate fetch in worker right away
-        const { chartSpanDays, candleSpanMins } = chartConfig[type];
-        workers[type].postMessage({
-            action: 'fetch',
-            symbol: symbol,
-            chartSpanDays: chartSpanDays,
-            candleSpanMins: candleSpanMins,
-        });
-    });
-
-    useEffect(() => {
-        // Cleanup workers
-        return () => {
-            Object.values(workers).forEach(worker => worker.terminate());
+        const fetchData = async () => {
+            const { chartSpanDays, candleSpanMins } = chartConfig[chartType];
+            const { data: fetchedData, error } = await fetchDataFromAPI(symbol, chartSpanDays, candleSpanMins);
+            if (error) {
+                setError(error);
+            } else {
+                setChartData(prevState => ({ ...prevState, [chartType]: fetchedData }));
+            }
+            setLoading(prevLoading => ({ ...prevLoading, [chartType]: false }));
         };
-    }, [workers]);
-    
+
+        fetchData();
+    }, [chartType, symbol]);
 
     return (
         <div>
-            <select value={chartType} onChange={e => setChartType(e.target.value)}>
-                <option value="7days">Last 7 days</option>
-                <option value="90days">Last 90 days</option>
-                <option value="24hours">Last 24 hours</option>
-            </select>
+            <div className="chart-option-container">
+                <button 
+                    className={`chart-option-btn ${chartType === '24hours' && 'active'}`}
+                    onClick={() => setChartType('24hours')}
+                >
+                    Last 24 hours
+                </button>
+                <button 
+                    className={`chart-option-btn ${chartType === '7days' && 'active'}`}
+                    onClick={() => setChartType('7days')}
+                >
+                    Last 7 days
+                </button>
+                <button 
+                    className={`chart-option-btn ${chartType === '90days' && 'active'}`}
+                    onClick={() => setChartType('90days')}
+                >
+                    Last 90 days
+                </button>
+            </div>
 
-            {error? (
+            {error ? (
                 <p>Error: {error}</p>
             ) : loading[chartType] ? (
                 <p>Loading...</p>
