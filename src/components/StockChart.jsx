@@ -8,14 +8,21 @@ function formatDateWithMinutes(timestamp) {
 function StockChart({ data }) {
     // Convert the API data to Google Charts format
     const transformedData = [
-        ['Date', 'Low', 'Opening Value', 'Closing Value', 'High'],
+        ['Date', 'Low', 'Opening Value', 'Closing Value', 'High', { role: 'tooltip', type: 'string', 'p': {'html': true} }],
         ...data.map(entry => [
             formatDateWithMinutes(entry.candleTimeStamp),
             entry.low,
             entry.open,
             entry.close,
             entry.high,
-        ]),
+            `<div style="padding: 10px; background-color: #333; color: #FFF;">
+                <strong>Date:</strong> ${formatDateWithMinutes(entry.candleTimeStamp)}<br>
+                <strong>Open:</strong> ${entry.open}<br>
+                <strong>Close:</strong> ${entry.close}<br>
+                <strong>High:</strong> ${entry.high}<br>
+                <strong>Low:</strong> ${entry.low}
+            </div>`
+        ])
     ];
 
     const options = {
@@ -51,7 +58,12 @@ function StockChart({ data }) {
       candlestick: {
           fallingColor: { strokeWidth: 0, fill: '#a52714' }, // red
           risingColor: { strokeWidth: 0, fill: '#0f9d58' }   // green
-      }
+      },
+      tooltip: {
+        isHtml: true,
+        trigger: 'hover',
+        ignoreBounds: true
+      },
   };
   
 
