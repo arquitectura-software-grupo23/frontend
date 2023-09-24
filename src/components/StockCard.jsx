@@ -83,7 +83,7 @@ function StockCard({ stock }) {
           </CardContent>
         </CardActionArea>
       </Link>
-      {/* <div>
+      <div>
         <Link to={`/chart/${stock.symbol}`} style={{ textDecoration: 'none', color: 'inherit', width: '100%' }}>
           <Button  
             sx={{ 
@@ -100,7 +100,7 @@ function StockCard({ stock }) {
             Grafico
           </Button>
         </Link>
-      </div> */}
+      </div>
       <div>
         {isAuthenticated&&
         <Link to={`/profile`} style={{ textDecoration: 'none', color: 'inherit', width: '100%' }}>
