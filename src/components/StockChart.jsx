@@ -1,46 +1,69 @@
-import {
-  ComposedChart,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Bar,
-} from 'recharts';
+import { Chart } from "react-google-charts";
+
+function formatDateWithMinutes(timestamp) {
+  const date = new Date(timestamp);
+  return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes() < 10 ? '0' : ''}${date.getMinutes()}`;
+}
 
 function StockChart({ data }) {
-  const CustomizedCandlestickBar = ({ x, y, width, height, fill }) => {
-    return (
-      <g>
-        <line x1={x + width / 2} y1={y} x2={x + width / 2} y2={y + height} stroke={fill} />
-        <rect x={x} y={y} width={width} height={height} fill={fill} />
-      </g>
-    );
-  };
+    // Convert the API data to Google Charts format
+    const transformedData = [
+        ['Date', 'Low', 'Opening Value', 'Closing Value', 'High'],
+        ...data.map(entry => [
+            formatDateWithMinutes(entry.candleTimeStamp),
+            entry.low,
+            entry.open,
+            entry.close,
+            entry.high,
+        ]),
+    ];
 
-  return (
-    <ComposedChart
-      width={600}
-      height={400}
-      data={data}
-      margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
-    >
-      <XAxis dataKey="updatedAt" />
-      <YAxis />
-      <Tooltip />
-      <Bar
-        dataKey="open"
-        shape={<CustomizedCandlestickBar />}
-        data={data.map(entry => ({
-          ...entry,
-          fill: entry.open > entry.close ? "#f00" : "#0f0",
-          topY: Math.max(entry.open, entry.close),
-          bottomY: Math.min(entry.open, entry.close),
-          height: Math.abs(entry.close - entry.open)
-        }))}
-      />
-      <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-    </ComposedChart>
-  );
+    const options = {
+      backgroundColor: '#333', // Dark background
+      legend: 'none',
+      
+      hAxis: {
+          title: 'Date',
+          textStyle: {
+              color: '#FFF', // White text
+          },
+          titleTextStyle: {
+              color: '#FFF', // White title text
+          },
+          baselineColor: '#666', // Color for the baseline
+          gridlines: {
+              color: '#444', // Gridline color
+          },
+      },
+      vAxis: {
+          title: 'Stock Price',
+          textStyle: {
+              color: '#FFF', // White text
+          },
+          titleTextStyle: {
+              color: '#FFF', // White title text
+          },
+          baselineColor: '#666', // Color for the baseline
+          gridlines: {
+              color: '#444', // Gridline color
+          },
+      },
+      candlestick: {
+          fallingColor: { strokeWidth: 0, fill: '#a52714' }, // red
+          risingColor: { strokeWidth: 0, fill: '#0f9d58' }   // green
+      }
+  };
+  
+
+    return (
+        <Chart
+            chartType="CandlestickChart"
+            width="100%"
+            height="400px"
+            data={transformedData}
+            options={options}
+        />
+    );
 }
 
 export default StockChart;
