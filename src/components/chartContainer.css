@@ -1,0 +1,26 @@
+.chart-option-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .chart-option-btn {
+    padding: 10px 20px;
+    margin: 0 5px;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background-color: #666;
+    color: #fff;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+  }
+  
+  .chart-option-btn:hover {
+    background-color: #444;
+  }
+  
+  .chart-option-btn.active {
+    background-color: #444;
+  }
+  
