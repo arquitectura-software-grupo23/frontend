@@ -38,11 +38,8 @@ function StockCard({ stock }) {
           'Authorization': `Bearer ${jwtoken}`,
         },
         body: JSON.stringify({
-            group_id: "23",
             symbol: stock.symbol,
-            deposit_token: "",
             quantity: 1,
-            seller: 0,
             user_id: user.sub,
             user_ip: ipData.ip,
             user_location: cityData.city
@@ -50,7 +47,15 @@ function StockCard({ stock }) {
       });
 
       if (response.ok) {
-        console.log('Solicitud exitosa');
+        console.log('Se ha recibido webpay token');
+        //"token": "01ab79024dd4b66844214ae84968410d34c3a85e7453fee3612e06e099bbde91",
+        //"url": "https://webpay3gint.transbank.cl/webpayserver/initTransaction"
+        const responseData = await response.json();
+        const token = responseData.token;
+        const url = responseData.url;
+        
+        // Redireccionar a la URL con el token recibido
+        window.location.href = `${url}?token_ws=${token}`;
       } else {
         console.error('Error al realizar la solicitud');
       }
