@@ -48,8 +48,6 @@ function StockCard({ stock }) {
 
       if (response.ok) {
         console.log('Se ha recibido webpay token');
-        //"token": "01ab79024dd4b66844214ae84968410d34c3a85e7453fee3612e06e099bbde91",
-        //"url": "https://webpay3gint.transbank.cl/webpayserver/initTransaction"
         const responseData = await response.json();
         const token = responseData.token;
         const url = responseData.url;
@@ -66,7 +64,7 @@ function StockCard({ stock }) {
 
   return (
     <Card  key={stock.symbol} style={{ margin: 20, width: 300 }}>
-      <Link to={stock.symbol} key={stock.shortName} style={{ textDecoration: 'none', color: 'inherit' }}>
+      <Link to={"table/"+stock.symbol} key={stock.shortName} style={{ textDecoration: 'none', color: 'inherit' }}>
         <CardActionArea>
           <CardContent>
             <Typography variant="h5" component="div">

@@ -14,10 +14,10 @@ function Routing() {
         <Navbar/>
         <Routes>
           <Route path={"/"} element={<Home />} />
-          <Route path={"/:symbol"} element={<StockHistory />} />
+          <Route path={"/table/:symbol"} element={<StockHistory />} />
           <Route path={"/chart/:symbol"} element={<ChartContainer />} />
           <Route path={"/profile"} element={<Profile />} />
-          <Route path={"/validate/:token"} element={<Validate />} />
+          <Route path={"/validate"} element={<Validate />} />
         </Routes>
       </BrowserRouter>
     </>
