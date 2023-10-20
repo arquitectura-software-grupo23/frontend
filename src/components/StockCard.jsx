@@ -106,11 +106,9 @@ function StockCard({ stock }) {
       </div>
       <div>
         {isAuthenticated&&
-        <Link to={`/profile`} style={{ textDecoration: 'none', color: 'inherit', width: '100%' }}>
-          <Button  sx={{ backgroundColor: 'green', '&:hover': { backgroundColor: 'lightgreen' }, borderRadius: 0 }} component="label" variant="contained" startIcon={<ShoppingCartIcon />} style={{ width: '100%'}} onClick={buyStocks}>
-            Comprar stocks
-          </Button>
-        </Link>}
+        <Button  sx={{ backgroundColor: 'green', '&:hover': { backgroundColor: 'lightgreen' }, borderRadius: 0 }} component="label" variant="contained" startIcon={<ShoppingCartIcon />} style={{ width: '100%'}} onClick={buyStocks}>
+          Comprar stocks
+        </Button>}
       </div>
     </Card>
   );

@@ -15,7 +15,10 @@ const Validate = () => {
   useEffect(() => {
     const validateWebPayment = async () => {
       try {
-        const token = searchParams.get('token_ws')
+        const params = {};
+        for (let [key, value] of searchParams.entries()) {
+          params[key] = value;
+        }
 
         // const jwtoken = await getAccessTokenSilently();
 
@@ -25,9 +28,7 @@ const Validate = () => {
             'Content-Type': 'application/json',
             // 'Authorization': `Bearer ${jwtoken}`,
           },
-          body: JSON.stringify({
-              token
-          }),
+          body: JSON.stringify(params),
         });
 
       } catch (error) {
