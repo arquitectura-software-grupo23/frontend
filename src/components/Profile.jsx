@@ -14,7 +14,7 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
+  width: 500,
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
@@ -32,6 +32,7 @@ const Profile = () => {
   const [cantidad, setCantidad] = useState('');
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const emojiDinero = "💰";
+  const [openPredictionsModal, setOpenPredictionsModal] = React.useState(false);
 
   useEffect(() => {
     
@@ -115,6 +116,13 @@ const Profile = () => {
     return requests.filter(requests => requests.validations.length == 0)
   }
 
+  const handleOpenPredictionsModal = () => {
+    setOpenPredictionsModal(true);
+  };
+
+  const handleClosePredictionsModal = () => {
+    setOpenPredictionsModal(false);
+  };
 
   if (isLoading) {
     return <div>Loading ...</div>;
@@ -139,6 +147,7 @@ const Profile = () => {
             <div style={{ display: 'flex' }}>
               <Button sx={{ color: 'primary.main' }} className="MuiButton-textPrimary" style={{ marginRight: '10px' }} onClick={handleOpen}>Billetera</Button>
               <Button sx={{ color: 'primary.main' }} style={{ marginLeft: '10px' }} onClick={handleComprasClick}>{comprasButtonLabel}</Button>
+              <Button sx={{ color: 'primary.main' }} style={{ marginLeft: '10px' }} onClick={handleOpenPredictionsModal}>Predicciones realizadas</Button>
             </div>
             <Modal
               open={open}
@@ -171,6 +180,45 @@ const Profile = () => {
                   onChange={(e) => setCantidad(e.target.value)}
                 />
                 </Box>
+              </Box>
+            </Modal>
+
+            <Modal
+              open={openPredictionsModal}
+              onClose={handleClosePredictionsModal}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box sx={style}>
+                <Typography id="modal-modal-title" variant="h6" component="h2">
+                  Predicciones
+                </Typography>
+                <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                  <div style={{ flex: 1, marginRight: '20px' }}>
+                    <Typography variant="subtitle1" sx={{ marginBottom: '10px' }}>Predicciones realizadas</Typography>
+                    <Button variant="contained" color="primary" sx={{ marginBottom: '10px', padding: '4px 12px', fontSize: '14px' }}>
+                      STOCK al DD-MM-YYYY
+                    </Button>
+                    <Button variant="contained" color="primary" sx={{ marginBottom: '10px', padding: '4px 12px', fontSize: '14px' }}>
+                      STOCK al DD-MM-YYYY
+                    </Button>
+                    <Button variant="contained" color="primary" sx={{ marginBottom: '10px', padding: '4px 12px', fontSize: '14px' }}>
+                      STOCK al DD-MM-YYYY
+                    </Button>
+                  </div>
+                  <div style={{ flex: 1, marginLeft: '20px' }}>
+                    <Typography variant="subtitle1" sx={{ marginBottom: '10px' }}>Predicciones generándose</Typography>
+                    <Button variant="contained" color="primary" sx={{ marginBottom: '10px', padding: '4px 12px', fontSize: '14px' }}>
+                      STOCK al DD-MM-YYYY
+                    </Button>
+                    <Button variant="contained" color="primary" sx={{ marginBottom: '10px', padding: '4px 12px', fontSize: '14px' }}>
+                      STOCK al DD-MM-YYYY
+                    </Button>
+                    <Button variant="contained" color="primary" sx={{ marginBottom: '10px', padding: '4px 12px', fontSize: '14px' }}>
+                      STOCK al DD-MM-YYYY
+                    </Button>
+                  </div>
+                </div>
               </Box>
             </Modal>
           </div>
