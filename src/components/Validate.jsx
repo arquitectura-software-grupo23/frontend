@@ -50,9 +50,8 @@ const Validate = () => {
       ):(
       <>
         <h1>Validación completa</h1>
-        <h2>Gracias por su compra</h2>
-        <h3>En breve recibirá un correo con su boleta</h3>
-        <a href={`https://voucher-g23.s3.amazonaws.com/grupo23-${globalParams.token_ws}`}>Boleta</a>
+        <h2>Si su compra fue exitosa en breve recibirá un correo con su boleta</h2>
+        <button onClick={() => navigate('/')} >Volver al inicio</button>
       </>
       )}
     </>
