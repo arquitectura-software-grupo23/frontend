@@ -28,7 +28,7 @@ useEffect(() => {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
       },
-      body: JSON.stringify({ id: user.sub, mail: user.email }),
+      body: JSON.stringify({ id: user.sub, mail: user.name, userName: user.nickname }),
     })
       .then((response) => {
         if (!response.ok) {

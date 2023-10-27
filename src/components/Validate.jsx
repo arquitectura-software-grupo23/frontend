@@ -10,6 +10,7 @@ const Validate = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [isLoading, setIsLoading] = useState(true); 
+  const [globalParams, setGlobalParams] = useState([{}]); 
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,6 +20,7 @@ const Validate = () => {
         for (let [key, value] of searchParams.entries()) {
           params[key] = value;
         }
+        setGlobalParams(params);
 
         // const jwtoken = await getAccessTokenSilently();
 
@@ -34,8 +36,7 @@ const Validate = () => {
       } catch (error) {
         console.error('Error en la solicitud:', error);
       } finally {
-        setIsLoading(false);      
-        // navigate("/");
+        setIsLoading(false);
       }
     };
 
@@ -44,7 +45,16 @@ const Validate = () => {
 
   return (
     <>
-      {isLoading ? <h1>Validando datos...</h1> : <h1>Validación completa</h1>}
+      {isLoading ? (
+        <h1>Validando datos...</h1> 
+      ):(
+      <>
+        <h1>Validación completa</h1>
+        <h2>Gracias por su compra</h2>
+        <h3>En breve recibirá un correo con su boleta</h3>
+        <a href={`https://voucher-g23.s3.amazonaws.com/grupo23-${globalParams.token_ws}`}>Boleta</a>
+      </>
+      )}
     </>
   );
 };

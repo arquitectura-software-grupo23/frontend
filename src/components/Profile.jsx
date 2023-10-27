@@ -119,7 +119,7 @@ const Profile = () => {
   if (isLoading) {
     return <div>Loading ...</div>;
   }
-
+  console.log('User:', user);
   return (
     isAuthenticated && (
       <div className="profile-container">
@@ -134,8 +134,8 @@ const Profile = () => {
             <div className="profile-image">
               <img src={user.picture} alt={user.name} />
             </div>
-            <h2>{user.name}</h2>
-            <p>{user.email}</p>
+            <h2>{user.nickname}</h2>
+            <p>{user.name}</p>
             <div style={{ display: 'flex' }}>
               <Button sx={{ color: 'primary.main' }} className="MuiButton-textPrimary" style={{ marginRight: '10px' }} onClick={handleOpen}>Billetera</Button>
               <Button sx={{ color: 'primary.main' }} style={{ marginLeft: '10px' }} onClick={handleComprasClick}>{comprasButtonLabel}</Button>
@@ -147,13 +147,7 @@ const Profile = () => {
               aria-describedby="modal-modal-description"
             >
               <Box sx={style}>
-                <Typography id="modal-modal-title" variant="h6" component="h2">
-                  Dinero disponible
-                </Typography>
-                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                  Tu saldo actual es de: {emojiDinero} ${dinero.toFixed(2)}
-                </Typography>
-              
+          
                 <Box 
                 sx={{
                   display: "flex",
