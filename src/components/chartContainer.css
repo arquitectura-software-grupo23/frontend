@@ -1,9 +1,24 @@
+.chart-container-wrapper {
+  display: flex;
+  justify-content: space-around; 
+  align-items: center; 
+  margin-bottom: 10px;
+}
+
 .chart-option-container {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     margin-bottom: 20px;
+    margin-right: 10px;
   }
-  
+
+.chart-btn-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+    margin-left: 10px;
+  }
+
   .chart-option-btn {
     padding: 10px 20px;
     margin: 0 5px;
@@ -24,3 +39,36 @@
     background-color: #444;
   }
   
+  .my-modal {
+    background-color: #f0f0f0;
+    color: #fff;
+    border: 1px solid #333;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    margin: 0 auto;
+    position: absolute; 
+    top: 50%; /* Position 50% from the top */
+    left: 50%; /* Position 50% from the left */
+    transform: translate(-50%, -50%); /* Center the modal */
+  }
+  
+  .modal-button {
+    margin-right: 5px; 
+  }
+
+  .modal-button-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+
+  .date-input-container {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+  }
+
+  .date-picker {
+    margin-left: 10px; 
+  }
