@@ -41,6 +41,10 @@ function Navbar() {
     navigate("/profile");
   }
 
+  function handleProjectionsRedirect() {
+    navigate("/projections");
+  }
+
   function handleOpenUserMenu(event) {
     setAnchorElUser(event.currentTarget);
   }
@@ -76,6 +80,10 @@ function Navbar() {
           >
             <MenuItem key="profile" onClick={handleProfileRedirect}>
               <Typography textAlign="center">Profile</Typography>
+            </MenuItem>
+
+            <MenuItem key="projections" onClick={handleProjectionsRedirect}>
+              <Typography textAlign="center">Projections</Typography>
             </MenuItem>
 
             <MenuItem key="logout" onClick={handleLogout}>
