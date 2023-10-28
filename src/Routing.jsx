@@ -4,6 +4,7 @@ import StockHistory from "./components/StockHistory";
 import Profile from "./components/Profile";
 import Navbar from "./components/Navbar";
 import ChartContainer from "./components/chartContainer";
+import Validate from "./components/Validate";
 
 
 function Routing() {
@@ -13,9 +14,10 @@ function Routing() {
         <Navbar/>
         <Routes>
           <Route path={"/"} element={<Home />} />
-          <Route path={"/:symbol"} element={<StockHistory />} />
+          <Route path={"/table/:symbol"} element={<StockHistory />} />
           <Route path={"/chart/:symbol"} element={<ChartContainer />} />
           <Route path={"/profile"} element={<Profile />} />
+          <Route path={"/validate"} element={<Validate />} />
         </Routes>
       </BrowserRouter>
     </>

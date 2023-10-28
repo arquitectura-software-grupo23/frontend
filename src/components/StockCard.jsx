@@ -38,11 +38,8 @@ function StockCard({ stock }) {
           'Authorization': `Bearer ${jwtoken}`,
         },
         body: JSON.stringify({
-            group_id: "23",
             symbol: stock.symbol,
-            deposit_token: "",
             quantity: 1,
-            seller: 0,
             user_id: user.sub,
             user_ip: ipData.ip,
             user_location: cityData.city
@@ -50,7 +47,13 @@ function StockCard({ stock }) {
       });
 
       if (response.ok) {
-        console.log('Solicitud exitosa');
+        console.log('Se ha recibido webpay token');
+        const responseData = await response.json();
+        const token = responseData.token;
+        const url = responseData.url;
+        
+        // Redireccionar a la URL con el token recibido
+        window.location.href = `${url}?token_ws=${token}`;
       } else {
         console.error('Error al realizar la solicitud');
       }
@@ -61,7 +64,7 @@ function StockCard({ stock }) {
 
   return (
     <Card  key={stock.symbol} style={{ margin: 20, width: 300 }}>
-      <Link to={stock.symbol} key={stock.shortName} style={{ textDecoration: 'none', color: 'inherit' }}>
+      <Link to={"table/"+stock.symbol} key={stock.shortName} style={{ textDecoration: 'none', color: 'inherit' }}>
         <CardActionArea>
           <CardContent>
             <Typography variant="h5" component="div">
@@ -103,11 +106,9 @@ function StockCard({ stock }) {
       </div>
       <div>
         {isAuthenticated&&
-        <Link to={`/profile`} style={{ textDecoration: 'none', color: 'inherit', width: '100%' }}>
-          <Button  sx={{ backgroundColor: 'green', '&:hover': { backgroundColor: 'lightgreen' }, borderRadius: 0 }} component="label" variant="contained" startIcon={<ShoppingCartIcon />} style={{ width: '100%'}} onClick={buyStocks}>
-            Comprar stocks
-          </Button>
-        </Link>}
+        <Button  sx={{ backgroundColor: 'green', '&:hover': { backgroundColor: 'lightgreen' }, borderRadius: 0 }} component="label" variant="contained" startIcon={<ShoppingCartIcon />} style={{ width: '100%'}} onClick={buyStocks}>
+          Comprar stocks
+        </Button>}
       </div>
     </Card>
   );
