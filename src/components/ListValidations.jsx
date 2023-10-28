@@ -15,19 +15,21 @@ function ListValidations({ requests }) {
             <ListItem alignItems="flex-start">
               <ListItemText
                 primary={
-                <Typography component="span" variant="body1" color="black">
+                  <Typography component="span" variant="body1" color="black">
                     {request.symbol} {request.quantity}
-                </Typography>     
+                  </Typography>
                 }
                 secondary={
                   <>
-                    <Typography component="span" variant="p" color="black">
+                    <Typography component="span" variant="body2" color="black">
                       {request.createdAt} {request.user_location}
                     </Typography>
+                    <a href={`https://voucher-g23.s3.amazonaws.com/grupo23-${request.deposit_token}`} target="_blank" rel="noopener noreferrer"> BOLETA</a>
                   </>
                 }
               />
             </ListItem>
+
           </React.Fragment>
         ))
       ) : (

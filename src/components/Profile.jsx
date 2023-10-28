@@ -27,34 +27,10 @@ const Profile = () => {
   const [open, setOpen] = React.useState(false);
   const [showCompras, setShowCompras] = React.useState(false);
   const [comprasButtonLabel, setComprasButtonLabel] = React.useState("Mostrar compras");
-  const [dinero, setDinero] = useState(0);
   const [requests, setRequests] = useState([]);
   const [cantidad, setCantidad] = useState('');
-  const [triggerUpdate, setTriggerUpdate] = useState(false);
-  const emojiDinero = "💰";
 
-  useEffect(() => {
-    
-    const fetchMoneyFromUserInfo = async () => {
-      console.log('Fetching money from user info', user.sub);
-
-      const jwtoken = await getAccessTokenSilently();
-      const data = await fetch(`${import.meta.env.VITE_API_GATEWAY_URL}/getMoney/${user.sub}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${jwtoken}`,
-        },
-      });
-      const jsonData = await data.json();
-      console.log('Respuesta del servidor:', data, jsonData);
-      setDinero(jsonData[0].wallet);
-    };
-    if (isAuthenticated) {
-      fetchMoneyFromUserInfo();
-    }
-  }, [triggerUpdate, isAuthenticated]); // Añade triggerUpdate como dependencia
-  
+ 
   const getRequestsWithValidations = async () => {
     const jwtoken = await getAccessTokenSilently();
 
@@ -67,9 +43,10 @@ const Profile = () => {
     });
     const responseAsJson = await response.json();
     setRequests(responseAsJson);
+    console.log('responseAsJson:', responseAsJson);
   }
 
-  const handleOpen = () => setOpen(true);
+
   const handleClose = () => setOpen(false);
   
   const handleComprasClick = () => {
@@ -79,33 +56,9 @@ const Profile = () => {
     } else {
       setShowCompras(true);
       setComprasButtonLabel("Ocultar compras");
-      getRequestsWithValidations()
+      getRequestsWithValidations();
     }
   };
-
-  const handleAgregarDinero = async () => {
-    try {
-      const jwtoken = await getAccessTokenSilently();
-
-      const response = await fetch(`${import.meta.env.VITE_API_GATEWAY_URL}/addMoney`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${jwtoken}`,
-        },
-        body: JSON.stringify({
-          id: user.sub,
-          amount: cantidad,
-        }),
-      });
-      setCantidad('');
-      setTriggerUpdate(!triggerUpdate);
-    } catch (error) {
-      console.error('Hubo un error al enviar la solicitud:', error);
-    }
-  };
-
- 
 
  const filterValidatedRequests = (requests) => {
   return requests.filter(requests => requests.validations.length > 0)
@@ -137,7 +90,6 @@ const Profile = () => {
             <h2>{user.nickname}</h2>
             <p>{user.name}</p>
             <div style={{ display: 'flex' }}>
-              <Button sx={{ color: 'primary.main' }} className="MuiButton-textPrimary" style={{ marginRight: '10px' }} onClick={handleOpen}>Billetera</Button>
               <Button sx={{ color: 'primary.main' }} style={{ marginLeft: '10px' }} onClick={handleComprasClick}>{comprasButtonLabel}</Button>
             </div>
             <Modal
@@ -153,9 +105,7 @@ const Profile = () => {
                   display: "flex",
                   flexDirection: "row",
                 }}>
-                <Button variant="contained" color="success" onClick={handleAgregarDinero}>
-                  Añadir
-                </Button>
+                
                 <TextField 
                   id="filled-basic" 
                   label="Cantidad" 
