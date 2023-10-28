@@ -37,13 +37,13 @@ const ChartContainer = () => {
     };
 
     const sendProjectionRequest = async (symbol) => {
-        const response = await fetch(`${import.meta.env.VITE_API_GATEWAY_URL}/requestProjection/${symbol}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/requestProjection/${symbol}`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              id: user.sub,
+              userId: user.sub,
               date: selectedDate,
             }),
           });
