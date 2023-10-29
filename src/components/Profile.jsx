@@ -60,8 +60,16 @@ const Profile = () => {
     }
   };
 
- const filterValidatedRequests = (requests) => {
-  return requests.filter(requests => requests.validations.length > 0)
+ const filterValidRequests = (requests) => {
+  return requests.filter(requests => requests.validations.length > 0
+      && requests.validations[0].valid
+    )
+  }
+
+ const filterUnvalidRequests = (requests) => {
+  return requests.filter(requests => requests.validations.length > 0 
+      && !requests.validations[0].valid
+  )
   }
 
   const filterNonValidatedRequests = (requests) => {
@@ -126,44 +134,44 @@ const Profile = () => {
               </Box>
             </Modal>
 
-            <Modal
-              open={openPredictionsModal}
-              onClose={handleClosePredictionsModal}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-            >
-              <Box sx={style}>
-                <Typography id="modal-modal-title" variant="h6" component="h2">
-                  Predicciones
-                </Typography>
-                <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                  <div style={{ flex: 1, marginRight: '20px' }}>
-                    <Typography variant="subtitle1" sx={{ marginBottom: '10px' }}>Predicciones realizadas</Typography>
-                    <Button variant="contained" color="primary" sx={{ marginBottom: '10px', padding: '4px 12px', fontSize: '14px' }}>
-                      STOCK al DD-MM-YYYY
-                    </Button>
-                    <Button variant="contained" color="primary" sx={{ marginBottom: '10px', padding: '4px 12px', fontSize: '14px' }}>
-                      STOCK al DD-MM-YYYY
-                    </Button>
-                    <Button variant="contained" color="primary" sx={{ marginBottom: '10px', padding: '4px 12px', fontSize: '14px' }}>
-                      STOCK al DD-MM-YYYY
-                    </Button>
-                  </div>
-                  <div style={{ flex: 1, marginLeft: '20px' }}>
-                    <Typography variant="subtitle1" sx={{ marginBottom: '10px' }}>Predicciones generándose</Typography>
-                    <Button variant="contained" color="primary" sx={{ marginBottom: '10px', padding: '4px 12px', fontSize: '14px' }}>
-                      STOCK al DD-MM-YYYY
-                    </Button>
-                    <Button variant="contained" color="primary" sx={{ marginBottom: '10px', padding: '4px 12px', fontSize: '14px' }}>
-                      STOCK al DD-MM-YYYY
-                    </Button>
-                    <Button variant="contained" color="primary" sx={{ marginBottom: '10px', padding: '4px 12px', fontSize: '14px' }}>
-                      STOCK al DD-MM-YYYY
-                    </Button>
-                  </div>
-                </div>
-              </Box>
-            </Modal>
+            {/* <Modal */}
+            {/*   open={openPredictionsModal} */}
+            {/*   onClose={handleClosePredictionsModal} */}
+            {/*   aria-labelledby="modal-modal-title" */}
+            {/*   aria-describedby="modal-modal-description" */}
+            {/* > */}
+            {/*   <Box sx={style}> */}
+            {/*     <Typography id="modal-modal-title" variant="h6" component="h2"> */}
+            {/*       Predicciones */}
+            {/*     </Typography> */}
+            {/*     <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}> */}
+            {/*       <div style={{ flex: 1, marginRight: '20px' }}> */}
+            {/*         <Typography variant="subtitle1" sx={{ marginBottom: '10px' }}>Predicciones realizadas</Typography> */}
+            {/*         <Button variant="contained" color="primary" sx={{ marginBottom: '10px', padding: '4px 12px', fontSize: '14px' }}> */}
+            {/*           STOCK al DD-MM-YYYY */}
+            {/*         </Button> */}
+            {/*         <Button variant="contained" color="primary" sx={{ marginBottom: '10px', padding: '4px 12px', fontSize: '14px' }}> */}
+            {/*           STOCK al DD-MM-YYYY */}
+            {/*         </Button> */}
+            {/*         <Button variant="contained" color="primary" sx={{ marginBottom: '10px', padding: '4px 12px', fontSize: '14px' }}> */}
+            {/*           STOCK al DD-MM-YYYY */}
+            {/*         </Button> */}
+            {/*       </div> */}
+            {/*       <div style={{ flex: 1, marginLeft: '20px' }}> */}
+            {/*         <Typography variant="subtitle1" sx={{ marginBottom: '10px' }}>Predicciones generándose</Typography> */}
+            {/*         <Button variant="contained" color="primary" sx={{ marginBottom: '10px', padding: '4px 12px', fontSize: '14px' }}> */}
+            {/*           STOCK al DD-MM-YYYY */}
+            {/*         </Button> */}
+            {/*         <Button variant="contained" color="primary" sx={{ marginBottom: '10px', padding: '4px 12px', fontSize: '14px' }}> */}
+            {/*           STOCK al DD-MM-YYYY */}
+            {/*         </Button> */}
+            {/*         <Button variant="contained" color="primary" sx={{ marginBottom: '10px', padding: '4px 12px', fontSize: '14px' }}> */}
+            {/*           STOCK al DD-MM-YYYY */}
+            {/*         </Button> */}
+            {/*       </div> */}
+            {/*     </div> */}
+            {/*   </Box> */}
+            {/* </Modal> */}
           </div>
         </div>
         
@@ -172,7 +180,13 @@ const Profile = () => {
           <div className="compras-card">
             <div className="compras-column">
               <h3>Compras exitosas</h3>
-              <ListValidations requests={filterValidatedRequests(requests)}/>
+              <ListValidations requests={filterValidRequests(requests)}/>
+            </div>
+          </div>
+          <div className="compras-card">
+            <div className="compras-column">
+              <h3>Compras no existosas</h3>
+              <ListValidations requests={filterUnvalidRequests(requests)}/>
             </div>
           </div>
           <div className="compras-card">
