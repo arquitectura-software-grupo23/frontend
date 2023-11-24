@@ -8,6 +8,7 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import { useEffect, useState } from "react";
 import ListValidations from "./ListValidations";
+import { useUser } from "../contexts/UserContext";
 
 const style = {
   position: 'absolute',
@@ -24,6 +25,7 @@ const style = {
 
 const Profile = () => {
   const { user, isAuthenticated, isLoading, getAccessTokenSilently } = useAuth0();
+  const { isAdmin } = useUser();
   const [open, setOpen] = React.useState(false);
   const [showCompras, setShowCompras] = React.useState(false);
   const [comprasButtonLabel, setComprasButtonLabel] = React.useState("Mostrar compras");
@@ -31,6 +33,8 @@ const Profile = () => {
   const [cantidad, setCantidad] = useState('');
   const [openPredictionsModal, setOpenPredictionsModal] = React.useState(false);
  
+  console.log('isAdmin:', isAdmin);
+  
   const getRequestsWithValidations = async () => {
     const jwtoken = await getAccessTokenSilently();
 
