@@ -5,10 +5,9 @@ import Typography from "@mui/material/Typography";
 import { CardActionArea, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import ShowChartIcon from '@mui/icons-material/ShowChart'; 
-import { useEffect, useState } from "react";
+import ShowChartIcon from '@mui/icons-material/ShowChart';
 import { useAuth0 } from "@auth0/auth0-react";
-
+import { useUser } from "../contexts/UserContext";
 
 
 function minutesSince(updatedAt) {
@@ -20,8 +19,17 @@ function minutesSince(updatedAt) {
 
 function StockCard({ stock }) {
   const { user, isAuthenticated, getAccessTokenSilently  } = useAuth0();
+  const { isAdmin } = useUser();
 
   const buyStocks = async () => {
+    if(isAdmin == true){
+      adminPurchase();
+    } else if(isAdmin == false) {
+      normalPurchase();
+    }
+  };
+
+  const adminPurchase = async () => {
     try {
       const ipDataResponse = await fetch('https://api.ipify.org?format=json');
       const ipData = await ipDataResponse.json();
@@ -60,7 +68,11 @@ function StockCard({ stock }) {
     } catch (error) {
       console.error('Error de red:', error);
     }
-  };
+  }
+
+  const normalPurchase = async () => {
+    console.log('Normal purchase');
+  }
 
   return (
     <Card  key={stock.symbol} style={{ margin: 20, width: 300 }}>
@@ -106,7 +118,9 @@ function StockCard({ stock }) {
       </div>
       <div>
         {isAuthenticated&&
-        <Button  sx={{ backgroundColor: 'green', '&:hover': { backgroundColor: 'lightgreen' }, borderRadius: 0 }} component="label" variant="contained" startIcon={<ShoppingCartIcon />} style={{ width: '100%'}} onClick={buyStocks}>
+        <Button  sx={{ backgroundColor: 'green', '&:hover': { backgroundColor: 'lightgreen' }, borderRadius: 0 }} 
+          component="label" variant="contained" startIcon={<ShoppingCartIcon />} 
+          style={{ width: '100%'}} onClick={buyStocks}>
           Comprar stocks
         </Button>}
       </div>

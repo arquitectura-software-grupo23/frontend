@@ -50,7 +50,6 @@ const Profile = () => {
     console.log('responseAsJson:', responseAsJson);
   }
 
-
   const handleClose = () => setOpen(false);
   
   const handleComprasClick = () => {
@@ -91,7 +90,7 @@ const Profile = () => {
   if (isLoading) {
     return <div>Loading ...</div>;
   }
-  console.log('User:', user);
+
   return (
     isAuthenticated && (
       <div className="profile-container">
