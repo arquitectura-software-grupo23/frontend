@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -7,6 +7,8 @@ import { Link } from "react-router-dom";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import ShowChartIcon from '@mui/icons-material/ShowChart';
 import { useAuth0 } from "@auth0/auth0-react";
+import Modal from '@mui/material/Modal';
+import TextField from "@mui/material/TextField";
 import { useUser } from "../contexts/UserContext";
 
 
@@ -18,19 +20,35 @@ function minutesSince(updatedAt) {
 }
 
 function StockCard({ stock }) {
+  const [isBuyStockModalOpen, setIsBuyStockModalOpen] = useState(false);
   const { user, isAuthenticated, getAccessTokenSilently  } = useAuth0();
+  const [cantidad, setCantidad] = useState(""); // Nuevo estado para la cantidad
   const { isAdmin } = useUser();
+  
+  const handleBuyStockModalOpen = () => {
+    setIsBuyStockModalOpen(true);
+  };
+
+  const handleBuyStockModalClose = () => {
+    setIsBuyStockModalOpen(false);
+  };
+
+  const handleComprarClick = () => {
+    buyStocks();
+    console.log("Cantidad a comprar:", cantidad);
+  };
 
   const buyStocks = async () => {
-    if(isAdmin == true){
-      adminPurchase();
-    } else if(isAdmin == false) {
-      normalPurchase();
+    if(isAdmin){
+      adminPurchase('0', cantidad);
+    } else {
+      normalPurchase('23', cantidad);
     }
   };
 
-  const adminPurchase = async () => {
+  const adminPurchase = async (seller, quantity) => {
     try {
+      console.log("Admin");
       const ipDataResponse = await fetch('https://api.ipify.org?format=json');
       const ipData = await ipDataResponse.json();
 
@@ -47,10 +65,11 @@ function StockCard({ stock }) {
         },
         body: JSON.stringify({
             symbol: stock.symbol,
-            quantity: 1,
+            quantity: quantity,
             user_id: user.sub,
             user_ip: ipData.ip,
-            user_location: cityData.city
+            user_location: cityData.cit,
+            seller
         }),
       });
 
@@ -120,10 +139,56 @@ function StockCard({ stock }) {
         {isAuthenticated&&
         <Button  sx={{ backgroundColor: 'green', '&:hover': { backgroundColor: 'lightgreen' }, borderRadius: 0 }} 
           component="label" variant="contained" startIcon={<ShoppingCartIcon />} 
-          style={{ width: '100%'}} onClick={buyStocks}>
+          style={{ width: '100%'}} onClick={handleBuyStockModalOpen}>
           Comprar stocks
         </Button>}
       </div>
+
+      <Modal
+        open={isBuyStockModalOpen}
+        onClose={handleBuyStockModalClose}
+        aria-labelledby="buy-stock-modal-title"
+        aria-describedby="buy-stock-modal-description"
+      >
+        <div style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          backgroundColor: 'white',
+          padding: '20px',
+          border: '2px solid #000',
+          borderRadius: '8px',
+          color: 'black',
+          width: '400px',
+          textAlign: 'center',
+        }}>
+          <h2 id="buy-stock-modal-title">Compra tu stock</h2>
+          <p id="buy-stock-modal-description">Ingresa el monto que deseas comprar</p>
+          <TextField
+            label="Escribe la cantidad"
+            type="number"
+            variant="outlined"
+            style={{ margin: '10px 0', width: '100%' }}
+            InputLabelProps={{
+              style: { color: 'black' },
+            }}
+            InputProps={{
+              style: { color: 'black' },
+            }}
+            value={cantidad}
+            onChange={(e) => setCantidad(e.target.value)}
+          />
+          <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
+            <Button variant="contained" onClick={handleComprarClick}>
+              Comprar
+            </Button>
+            <Button variant="contained" onClick={handleBuyStockModalClose}>
+              Cancelar
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </Card>
   );
 }

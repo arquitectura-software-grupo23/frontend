@@ -45,6 +45,10 @@ function Navbar() {
     navigate("/projections");
   }
 
+  function handleAuctionsRedirect() {
+    navigate("/auctions");
+  }
+
   function handleOpenUserMenu(event) {
     setAnchorElUser(event.currentTarget);
   }
@@ -84,6 +88,10 @@ function Navbar() {
 
             <MenuItem key="projections" onClick={handleProjectionsRedirect}>
               <Typography textAlign="center">Projections</Typography>
+            </MenuItem>
+
+            <MenuItem key="auctions" onClick={handleAuctionsRedirect}>
+              <Typography textAlign="center">Auctions</Typography>
             </MenuItem>
 
             <MenuItem key="logout" onClick={handleLogout}>

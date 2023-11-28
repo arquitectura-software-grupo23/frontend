@@ -7,6 +7,7 @@ import ChartContainer from "./components/chartContainer";
 import UserRegressionRequests from "./components/Projections";
 import ProjectionChart from "./components/ProjectionChart";
 import Validate from "./components/Validate";
+import Auctions from "./components/admin/Auction"
 
 
 function Routing() {
@@ -20,6 +21,7 @@ function Routing() {
           <Route path={"/chart/:symbol"} element={<ChartContainer />} />
           <Route path={"/profile"} element={<Profile />} />
           <Route path={"/projections"} element={<UserRegressionRequests />} />
+          <Route path={"/auctions"} element={<Auctions />} />
           <Route path={"/projection/:jobId"} element={<ProjectionChart />}/>
           <Route path={"/validate"} element={<Validate />} />
         </Routes>
