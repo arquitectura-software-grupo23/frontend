@@ -6,7 +6,11 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 
 function ListValidations({ requests }) {
-  console.log(requests[0]?.validations[0].valid);
+ 
+requests.forEach(element => {
+  console.log(element, element.validations)
+});
+
   return (
     <List style={{ backgroundColor: '#f5f5f5', borderRadius: '8px', padding: '16px' }}>
       <Divider />
@@ -25,10 +29,11 @@ function ListValidations({ requests }) {
                     <Typography component="span" variant="body2" color="black">
                       {request.createdAt} {request.user_location}
                     </Typography>
-                    {request?.validations[0].valid
+                    {request?.validations[0]?.valid
                      &&(<a href={`https://voucher-g23.s3.amazonaws.com/grupo23-${request.deposit_token}`} target="_blank" rel="noopener noreferrer"> BOLETA</a>)}
                   </>
                 }
+                
               />
             </ListItem>
 

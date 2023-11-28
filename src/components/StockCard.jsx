@@ -40,15 +40,14 @@ function StockCard({ stock }) {
 
   const buyStocks = async () => {
     if(isAdmin){
-      adminPurchase('0', cantidad);
+      Purchase('0', cantidad, "request");
     } else {
-      normalPurchase('23', cantidad);
+      Purchase('23', cantidad, "groupStockPurchase");
     }
   };
 
-  const adminPurchase = async (seller, quantity) => {
+  const Purchase = async (seller, quantity, endpoint) => {
     try {
-      console.log("Admin");
       const ipDataResponse = await fetch('https://api.ipify.org?format=json');
       const ipData = await ipDataResponse.json();
 
@@ -57,7 +56,7 @@ function StockCard({ stock }) {
 
       const jwtoken = await getAccessTokenSilently();
       
-      const response = await fetch(`${import.meta.env.VITE_API_GATEWAY_URL}/request`, {
+      const response = await fetch(`${import.meta.env.VITE_API_GATEWAY_URL}/${endpoint}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -89,10 +88,6 @@ function StockCard({ stock }) {
     }
   }
 
-  const normalPurchase = async () => {
-    console.log('Normal purchase');
-  }
-
   return (
     <Card  key={stock.symbol} style={{ margin: 20, width: 300 }}>
       <Link to={"table/"+stock.symbol} key={stock.shortName} style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -106,6 +101,9 @@ function StockCard({ stock }) {
             </Typography>
             <Typography variant="body1" style={{ color: "lightgreen" }}>
               {stock.price} {stock.currency}
+            </Typography>
+            <Typography variant="subtitle1" color="textSecondary" noWrap={true}>
+              Quantity: {stock.quantity}
             </Typography>
             <Typography variant="body1">
               <br /> Updated {minutesSince(stock.updatedAt)} minutes ago
@@ -164,6 +162,8 @@ function StockCard({ stock }) {
           textAlign: 'center',
         }}>
           <h2 id="buy-stock-modal-title">Compra tu stock</h2>
+          <p>Tipo de usuario: {isAdmin ? "Administrador" : "Usuario normal"}</p>
+          <h4>Stock: {stock.symbol} MaxAmount: {stock.quantity}</h4>
           <p id="buy-stock-modal-description">Ingresa el monto que deseas comprar</p>
           <TextField
             label="Escribe la cantidad"
@@ -180,7 +180,7 @@ function StockCard({ stock }) {
             onChange={(e) => setCantidad(e.target.value)}
           />
           <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
-            <Button variant="contained" onClick={handleComprarClick}>
+            <Button variant="contained" onClick={handleComprarClick} disabled={cantidad > stock.quantity}>
               Comprar
             </Button>
             <Button variant="contained" onClick={handleBuyStockModalClose}>

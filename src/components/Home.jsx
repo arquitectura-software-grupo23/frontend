@@ -4,10 +4,12 @@ import { Box } from "@mui/material";
 
 function Home() {
   const [stocks, setStocks] = useState([]);
+  const [groupStocks, setGroupStocks] = useState([]);
+  const [availableStocks, setAvailableStocks] = useState([]);
 
   useEffect(() => {
     const fetchStocksFromApi = async () => {
-      let data;
+      let data; //each stock has a symbol
       try {
         data = await fetch(`${import.meta.env.VITE_API_URL}/stocks`)
         data = await data.json();
@@ -17,8 +19,35 @@ function Home() {
 
       setStocks(data);
     };
+  
+    const fetchGroupStocks = async () => {
+      let data; //each stock has a symbol
+      try {
+        data = await fetch(`${import.meta.env.VITE_API_URL}/groupstock`)
+        data = await data.json();
+      } catch (error) {
+        data = [];
+      }
+      console.log(data);
+      setGroupStocks(data);
+    };
+
     fetchStocksFromApi();
+    fetchGroupStocks();
   }, []);
+
+  useEffect(() => {
+    if(stocks && groupStocks){
+      const stocksWithAvailability = stocks.map((stock) => {
+        const quantity = groupStocks.find((groupStock) => groupStock.symbol === stock.symbol)?.amount;
+        return {
+          ...stock,
+          quantity: quantity ? quantity : 0,
+        };
+      });
+      setAvailableStocks(stocksWithAvailability);
+    }
+  }, [stocks, groupStocks]);
 
   return (
     <Box
@@ -29,7 +58,7 @@ function Home() {
         alignContent: "center",
       }}
     >
-      <StockCards stocks={stocks}></StockCards>
+      <StockCards stocks={availableStocks}></StockCards>
     </Box>
   );
 }
