@@ -180,7 +180,7 @@ function StockCard({ stock }) {
             onChange={(e) => setCantidad(e.target.value)}
           />
           <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
-            <Button variant="contained" onClick={handleComprarClick} disabled={cantidad > stock.quantity}>
+            <Button variant="contained" onClick={handleComprarClick} disabled={isAdmin ? false : cantidad > stock.quantity}>
               Comprar
             </Button>
             <Button variant="contained" onClick={handleBuyStockModalClose}>
